@@ -1,8 +1,12 @@
 package training.container.cookbook;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+// To test generation with custom instructions, try for instance:
+// curl localhost:8080/recipe -d "instructions=we want chocolate"
 
 @RestController
 public class RecipeGenerator {
@@ -13,9 +17,10 @@ public class RecipeGenerator {
         this.chatClient = builder.build();
     }
 
-    @GetMapping("/recipe")
-    public String generateRecipe() {
-        return chatClient.prompt("Generate a cooking recipe for a delicious main dish.").call().content();
+    @PostMapping("/recipe")
+    public String generateRecipe(@RequestParam(value = "instructions", defaultValue = "Make it vegan") String instructions) {
+        System.out.println("We got these instructions:\n" + instructions + "\n");
+        return chatClient.prompt("Generate a cooking recipe for a delicious main dish. Take into account the following instructions:\n" + instructions).call().content();
     }
 
 }
