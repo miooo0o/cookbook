@@ -21,7 +21,8 @@ public class RecipeGenerator {
     @PostMapping(value = "/recipe", produces = MediaType.APPLICATION_JSON_VALUE)
     public Recipe generateRecipe(@RequestParam(value = "instructions", defaultValue = "Make it vegan") String instructions) {
         System.out.println("We got these instructions:\n" + instructions + "\n");
-        Recipe recipe = chatClient.prompt("Generate a cooking recipe for a delicious main dish. Take into account the following instructions:\n" + instructions).call().entity(Recipe.class);
+        Recipe recipe = chatClient.prompt("Generate a cooking recipe for a delicious main dish. Take into account the following instructions:\n" + instructions + "Your response should be in JSON, with the following fields\n").call().entity(Recipe.class);
         return recipe;
     }
 }
+
